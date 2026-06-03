@@ -16,7 +16,7 @@ with DAG(
     default_args=default_args,
     description='Runs the dbt Medallion Architecture (Bronze -> Silver -> Gold)',
     schedule_interval='@daily',
-    start_date=datetime(2026, 1, 1),
+    start_date=pendulum.datetime(2026, 1, 1, tz="UTC"),
     catchup=False,
 ) as dag:
 

@@ -1,0 +1,25 @@
+name: 'mvp_data_platform'
+version: '1.0.0'
+config-version: 2
+
+profile: 'postgres_warehouse'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+
+models:
+  mvp_data_platform:
+    bronze:
+      +schema: bronze
+      +materialized: view
+    silver:
+      +schema: silver
+      +materialized: table
+    gold:
+      +schema: gold
+      +materialized: table

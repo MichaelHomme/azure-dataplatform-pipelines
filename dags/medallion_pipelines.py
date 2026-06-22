@@ -31,7 +31,7 @@ with DAG(
         name='dbt-seed',
         namespace='airflow',
         image='ghcr.io/dbt-labs/dbt-postgres:1.7.latest',
-        cmds=["dbt", "seed", "--profiles-dir", "/opt/airflow/dbt", "--project-dir", "/opt/airflow/dbt"],
+        cmds=["dbt", "seed", "--profiles-dir", "/opt/airflow/dags/repo/dbt", "--project-dir", "/opt/airflow/dags/repo/dbt"],
         # Pulls the password we injected into AKS earlier!
         env_vars={'DBT_PASSWORD': dbt_password,
                   'DBT_USER': dbt_user},
@@ -46,7 +46,7 @@ with DAG(
         name='dbt-run',
         namespace='airflow',
         image='ghcr.io/dbt-labs/dbt-postgres:1.7.latest',
-        cmds=["dbt", "run", "--profiles-dir", "/opt/airflow/dbt", "--project-dir", "/opt/airflow/dbt"],
+        cmds=["dbt", "run", "--profiles-dir", "/opt/airflow/dags/repo/dbt", "--project-dir", "/opt/airflow/dags/repo/dbt"],
         env_vars={'DBT_PASSWORD': dbt_password,
                   'DBT_USER': dbt_user},
         is_delete_operator_pod=True,

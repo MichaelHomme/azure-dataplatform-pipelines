@@ -2,6 +2,11 @@ from airflow import DAG
 from airflow.providers.cncf.kubernetes.operators.pod import KubernetesPodOperator
 from datetime import datetime, timedelta
 import pendulum
+from airflow.sdk import Variable
+
+# Normal call style
+dbt_user = Variable.get("DBT_USER")
+dbt_password = Variable.get("DBT_PASSWORD")
 
 default_args = {
     'owner': 'data_engineering',
@@ -28,7 +33,8 @@ with DAG(
         image='ghcr.io/dbt-labs/dbt-postgres:1.7.latest',
         cmds=["dbt", "seed", "--profiles-dir", "/opt/airflow/dbt", "--project-dir", "/opt/airflow/dbt"],
         # Pulls the password we injected into AKS earlier!
-        env_vars={'DBT_PASSWORD': '{{ secret("dbt-postgres-secret", "DBT_PASSWORD") }}'},
+        env_vars={'DBT_PASSWORD': dbt_password,
+                  'DBT_USER': dbt_user},
         is_delete_operator_pod=True,
         in_cluster=True,
         get_logs=True,
@@ -41,7 +47,8 @@ with DAG(
         namespace='airflow',
         image='ghcr.io/dbt-labs/dbt-postgres:1.7.latest',
         cmds=["dbt", "run", "--profiles-dir", "/opt/airflow/dbt", "--project-dir", "/opt/airflow/dbt"],
-        env_vars={'DBT_PASSWORD': '{{ secret("dbt-postgres-secret", "DBT_PASSWORD") }}'},
+        env_vars={'DBT_PASSWORD': dbt_password,
+                  'DBT_USER': dbt_user},
         is_delete_operator_pod=True,
         in_cluster=True,
         get_logs=True,

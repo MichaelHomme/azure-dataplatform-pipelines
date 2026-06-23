@@ -1,7 +1,7 @@
 from airflow import DAG
 from airflow.providers.cncf.kubernetes.operators.pod import KubernetesPodOperator
+from airflow.providers.standard.operators.bash import BashOperator
 from datetime import datetime, timedelta
-import pendulum
 from airflow.sdk import Variable
 
 # Normal call style
@@ -25,34 +25,16 @@ with DAG(
     catchup=False,
 ) as dag:
 
-    # Step 1: Load the raw CSVs into Postgres (Bronze)
-    dbt_seed = KubernetesPodOperator(
-        task_id='dbt_seed_raw_data',
-        name='dbt-seed',
-        namespace='airflow',
-        image='ghcr.io/dbt-labs/dbt-postgres:1.7.latest',
-        cmds=["dbt", "seed", "--profiles-dir", "/opt/airflow/dags/repo/dbt", "--project-dir", "/opt/airflow/dags/repo/dbt"],
-        # Pulls the password we injected into AKS earlier!
-        env_vars={'DBT_PASSWORD': dbt_password,
-                  'DBT_USER': dbt_user},
-        is_delete_operator_pod=True,
-        in_cluster=True,
-        get_logs=True,
+    # test bashoperator
+    test_bash = BashOperator(
+        task_id='test_bash',
+        bash_command='echo "Hello, World!"',
     )
 
-    # Step 2: Run the Medallion transformations (Silver & Gold)
-    dbt_run = KubernetesPodOperator(
-        task_id='dbt_run_models',
-        name='dbt-run',
-        namespace='airflow',
-        image='ghcr.io/dbt-labs/dbt-postgres:1.7.latest',
-        cmds=["dbt", "run", "--profiles-dir", "/opt/airflow/dags/repo/dbt", "--project-dir", "/opt/airflow/dags/repo/dbt"],
-        env_vars={'DBT_PASSWORD': dbt_password,
-                  'DBT_USER': dbt_user},
-        is_delete_operator_pod=True,
-        in_cluster=True,
-        get_logs=True,
+    # List files in Pod
+    list_files = BashOperator(
+        task_id='list_files',
+        bash_command='ls -l /opt/airflow',
     )
 
-    # Define the dependency (Seed first, then Run)
-    dbt_seed >> dbt_run
+test_bash >> list_files

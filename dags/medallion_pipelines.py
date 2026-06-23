@@ -37,4 +37,9 @@ with DAG(
         bash_command='ls -l /opt/airflow',
     )
 
-test_bash >> list_files
+    echo_postgres_path = BashOperator(
+        task_id='echo_postgres_path',
+        bash_command='echo "Postgres path: $DBT_POSTGRES_HOST"',
+    )
+
+test_bash >> list_files >> echo_postgres_path

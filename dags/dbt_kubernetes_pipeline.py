@@ -31,10 +31,13 @@ with DAG(
         is_delete_operator_pod=False,
         in_cluster=True,
         get_logs=True,
+        env_vars={
+            "DBT_USER": "{{ var.value.DBT_USER }}",
+            "DBT_PASSWORD": "{{ var.value.DBT_PASSWORD }}",
+        },
         cmds=["bash", "-c"],
         arguments=[
-            "dbt seed",
-            "dbt run"
+            "dbt seed && dbt run"
         ],
         on_finish_action="keep_pod",
     )

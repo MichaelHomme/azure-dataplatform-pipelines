@@ -33,5 +33,5 @@ with DAG(
     get_logs=True,
     cmds=["bash", "-c"],
     arguments=["sleep 600"],
-    on_kill_action="keep_pod",
+    on_finish_action="keep_pod",
     )

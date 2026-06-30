@@ -22,14 +22,14 @@ with DAG(
     tags=["dbt", "kubernetes", "acr"],
 ) as dag:
     run_dbt = KubernetesPodOperator(
-        task_id="run_dbt",
-        name="run-dbt",
-        namespace="airflow",                  # must be airflow, not default
-        service_account_name="airflow-worker",
-        image="acrixgs8i.azurecr.io/dbt:latest",
-        image_pull_policy="Always",
-        in_cluster=True,
-        is_delete_operator_pod=True,
-        get_logs=True,
-        arguments=["--version"],
-    )
+    task_id="run_dbt",
+    name="run-dbt",
+    namespace="airflow",                  # must be airflow, not default
+    service_account_name="airflow-worker",
+    image="acrixgs8i.azurecr.io/dbt:latest",
+    image_pull_policy="Always",
+    in_cluster=True,
+    is_delete_operator_pod=True,
+    get_logs=True,
+    arguments=["--version; sleep 600"],
+)

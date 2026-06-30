@@ -3,10 +3,10 @@ postgres_warehouse:
   outputs:
     dev:
       type: postgres
-      host: "{{ env_var('DBT_POSTGRES_HOST') }}"
+      host: psql-dataplatform-mvp-41a5.postgres.database.azure.com
       user: "{{ env_var('DBT_USER') }}"
       password: "{{ env_var('DBT_SECRET') }}"
-      port: {{ env_var('DBT_POSTGRES_PORT', '5432') | int }}
-      dbname: "{{ env_var('DBT_POSTGRES_DBNAME') }}"
-      schema: "{{ env_var('DBT_POSTGRES_SCHEMA') }}"
+      port: 5432
+      dbname: postres
+      schema: dbt
       threads: 4

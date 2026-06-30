@@ -1,0 +1,35 @@
+from datetime import datetime, timedelta
+
+from airflow import DAG
+from airflow.providers.cncf.kubernetes.operators.pod import KubernetesPodOperator
+
+
+default_args = {
+    "owner": "data_engineering",
+    "depends_on_past": False,
+    "email_on_failure": False,
+    "retries": 1,
+    "retry_delay": timedelta(minutes=5),
+}
+
+with DAG(
+    dag_id="dbt_kubernetes_pipeline",
+    default_args=default_args,
+    description="Runs dbt in Kubernetes using image from Azure Container Registry",
+    schedule="@daily",
+    start_date=datetime(2026, 1, 1),
+    catchup=False,
+    tags=["dbt", "kubernetes", "acr"],
+) as dag:
+    run_dbt = KubernetesPodOperator(
+        task_id="run_dbt",
+        name="run-dbt",
+        namespace="default",
+        image="acrixgs8i.azurecr.io/dbt:latest",
+        image_pull_policy="Always",
+        in_cluster=True,
+        is_delete_operator_pod=True,
+        get_logs=True,
+        # The Docker image entrypoint is `dbt`, so this runs `dbt --version`.
+        arguments=["--version"],
+    )

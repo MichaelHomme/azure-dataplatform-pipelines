@@ -32,5 +32,6 @@ with DAG(
     in_cluster=True,
     get_logs=True,
     cmds=["bash", "-c"],
-    arguments=["dbt --version", "sleep 600"],
+    arguments=["sleep 600"],
+    on_kill_action="keep_pod",
     )

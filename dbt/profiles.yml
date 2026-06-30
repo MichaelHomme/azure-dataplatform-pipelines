@@ -5,8 +5,8 @@ postgres_warehouse:
       type: postgres
       host: psql-dataplatform-mvp-41a5.postgres.database.azure.com
       user: "{{ env_var('DBT_USER') }}"
-      password: "{{ env_var('DBT_SECRET') }}"
+      password: "{{ env_var('DBT_PASSWORD') }}"
       port: 5432
-      dbname: postres
+      dbname: postgres
       schema: dbt
       threads: 4

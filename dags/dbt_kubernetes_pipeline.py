@@ -31,5 +31,6 @@ with DAG(
     in_cluster=True,
     is_delete_operator_pod=True,
     get_logs=True,
-    arguments=["--version; sleep 600"],
+    cmds=["/bin/bash", "-c"],
+    arguments=["sleep 600"]
 )

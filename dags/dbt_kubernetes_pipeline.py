@@ -31,5 +31,5 @@ with DAG(
     is_delete_operator_pod=False, 
     in_cluster=True,
     get_logs=True,
-    arguments=["run", "--profiles-dir", "/opt/airflow/dags/repo/db", "--project-dir", "/opt/airflow/dags/repo/db"],
+    arguments=["run", "--profiles-dir", "/opt/airflow/dags/repo/dbt/", "--project-dir", "/opt/airflow/dags/repo/dbt/"],
 )

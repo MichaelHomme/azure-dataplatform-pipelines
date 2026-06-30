@@ -24,12 +24,11 @@ with DAG(
     run_dbt = KubernetesPodOperator(
         task_id="run_dbt",
         name="run-dbt",
-        namespace="default",
+        namespace="airflow",          # was "default"
         image="acrixgs8i.azurecr.io/dbt:latest",
         image_pull_policy="Always",
         in_cluster=True,
         is_delete_operator_pod=True,
         get_logs=True,
-        # The Docker image entrypoint is `dbt`, so this runs `dbt --version`.
         arguments=["--version"],
     )

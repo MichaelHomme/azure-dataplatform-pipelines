@@ -24,7 +24,8 @@ with DAG(
     run_dbt = KubernetesPodOperator(
         task_id="run_dbt",
         name="run-dbt",
-        namespace="airflow",          # was "default"
+        namespace="airflow",                  # must be airflow, not default
+        service_account_name="airflow-worker",
         image="acrixgs8i.azurecr.io/dbt:latest",
         image_pull_policy="Always",
         in_cluster=True,

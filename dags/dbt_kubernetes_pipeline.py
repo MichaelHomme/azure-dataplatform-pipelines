@@ -28,8 +28,8 @@ with DAG(
     service_account_name="airflow-worker",
     image="acrixgs8i.azurecr.io/dbt:latest",
     image_pull_policy="Always",
+    is_delete_operator_pod=False, 
     in_cluster=True,
-    is_delete_operator_pod=True,
     get_logs=True,
     arguments=["run", "--profiles-dir", "/opt/airflow/dags/repo/db", "--project-dir", "/opt/airflow/dags/repo/db"],
 )

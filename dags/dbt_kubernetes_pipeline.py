@@ -31,6 +31,5 @@ with DAG(
     in_cluster=True,
     is_delete_operator_pod=True,
     get_logs=True,
-    cmds=["/bin/bash", "-c"],
-    arguments=["sleep 600"]
+    arguments=["run", "--profiles-dir", "/opt/airflow/dags/repo/db", "--project-dir", "/opt/airflow/dags/repo/db"],
 )
